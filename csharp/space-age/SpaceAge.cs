@@ -8,27 +8,30 @@ public class SpaceAge
     public SpaceAge(int seconds) =>
         _seconds = seconds;
 
+    private double Calculate(double conversionFromEarthFactor) =>
+        _seconds / (EarthYearConversionFactor * conversionFromEarthFactor);
+
     public double OnEarth() =>
-        _seconds / EarthYearConversionFactor;
+        Calculate(1);
 
     public double OnMercury() =>
-        _seconds / (EarthYearConversionFactor * 0.2408467);
+        Calculate(0.2408467);
 
     public double OnVenus() =>
-        _seconds / (EarthYearConversionFactor * 0.61519726);
+        Calculate(0.61519726);
 
     public double OnMars() =>
-        _seconds / (EarthYearConversionFactor * 1.8808158);
+        Calculate(1.8808158);
 
     public double OnJupiter() =>
-        _seconds / (EarthYearConversionFactor * 11.862615);
+        Calculate(11.862615);
 
     public double OnSaturn() =>
-        _seconds / (EarthYearConversionFactor * 29.447498);
+        Calculate(29.447498);
 
     public double OnUranus() =>
-        _seconds / (EarthYearConversionFactor * 84.016846);
+        Calculate(84.016846);
 
     public double OnNeptune() =>
-        _seconds / (EarthYearConversionFactor * 164.79132);
+        Calculate(164.79132);
 }
