@@ -35,7 +35,7 @@ public class StringFormattingTests
         Assert.Equal(expectedBanner.Trim(), actualBanner.Trim());
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void DisplayGermanExchangeStudents()
     {
         string actual = HighSchoolSweethearts.DisplayGermanExchangeStudents("Norbert", "Heidi",
