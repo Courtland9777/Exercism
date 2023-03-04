@@ -40,7 +40,7 @@ public class ListOpsTests
     [Fact]
     public void Concatenate_a_list_of_lists_list_of_lists()
     {
-        var lists = new List<List<int>> { new List<int> { 1, 2 }, new List<int> { 3 }, new List<int>(), new List<int> { 4, 5, 6 } };
+        var lists = new List<List<int>> { new() { 1, 2 }, new() { 3 }, new(), new() { 4, 5, 6 } };
         var expected = new List<int> { 1, 2, 3, 4, 5, 6 };
         Assert.Equal(expected, ListOps.Concat(lists));
     }
@@ -48,8 +48,12 @@ public class ListOpsTests
     [Fact]
     public void Concatenate_a_list_of_lists_list_of_nested_lists()
     {
-        var lists = new List<List<List<int>>> { new List<List<int>> { new List<int> { 1 }, new List<int> { 2 } }, new List<List<int>> { new List<int> { 3 } }, new List<List<int>> { new List<int>() }, new List<List<int>> { new List<int> { 4, 5, 6 } } };
-        var expected = new List<List<int>> { new List<int> { 1 }, new List<int> { 2 }, new List<int> { 3 }, new List<int>(), new List<int> { 4, 5, 6 } };
+        var lists = new List<List<List<int>>>
+        {
+            new() { new List<int>() { 1 }, new List<int>() { 2 } }, new() { new List<int>() { 3 } },
+            new() { new List<int>() }, new() { new() { 4, 5, 6 } }
+        };
+        var expected = new List<List<int>> { new() { 1 }, new() { 2 }, new() { 3 }, new(), new() { 4, 5, 6 } };
         Assert.Equal(expected, ListOps.Concat(lists));
     }
 
@@ -57,7 +61,7 @@ public class ListOpsTests
     public void Filter_list_returning_only_values_that_satisfy_the_filter_function_empty_list()
     {
         var list = new List<int>();
-        var function = new Func<int, bool>((x) => x % 2 == 1);
+        var function = new Func<int, bool>(x => x % 2 == 1);
         Assert.Empty(ListOps.Filter(list, function));
     }
 
@@ -65,7 +69,7 @@ public class ListOpsTests
     public void Filter_list_returning_only_values_that_satisfy_the_filter_function_non_empty_list()
     {
         var list = new List<int> { 1, 2, 3, 5 };
-        var function = new Func<int, bool>((x) => x % 2 == 1);
+        var function = new Func<int, bool>(x => x % 2 == 1);
         var expected = new List<int> { 1, 3, 5 };
         Assert.Equal(expected, ListOps.Filter(list, function));
     }
@@ -85,18 +89,20 @@ public class ListOpsTests
     }
 
     [Fact]
-    public void Return_a_list_of_elements_whose_values_equal_the_list_value_transformed_by_the_mapping_function_empty_list()
+    public void
+        Return_a_list_of_elements_whose_values_equal_the_list_value_transformed_by_the_mapping_function_empty_list()
     {
         var list = new List<int>();
-        var function = new Func<int, int>((x) => x + 1);
+        var function = new Func<int, int>(x => x + 1);
         Assert.Empty(ListOps.Map(list, function));
     }
 
     [Fact]
-    public void Return_a_list_of_elements_whose_values_equal_the_list_value_transformed_by_the_mapping_function_non_empty_list()
+    public void
+        Return_a_list_of_elements_whose_values_equal_the_list_value_transformed_by_the_mapping_function_non_empty_list()
     {
         var list = new List<int> { 1, 3, 5, 7 };
-        var function = new Func<int, int>((x) => x + 1);
+        var function = new Func<int, int>(x => x + 1);
         var expected = new List<int> { 2, 4, 6, 8 };
         Assert.Equal(expected, ListOps.Map(list, function));
     }
@@ -111,7 +117,8 @@ public class ListOpsTests
     }
 
     [Fact]
-    public void Folds_reduces_the_given_list_from_the_left_with_a_function_direction_independent_function_applied_to_non_empty_list()
+    public void
+        Folds_reduces_the_given_list_from_the_left_with_a_function_direction_independent_function_applied_to_non_empty_list()
     {
         var list = new List<int> { 1, 2, 3, 4 };
         var initial = 5;
@@ -120,7 +127,8 @@ public class ListOpsTests
     }
 
     [Fact]
-    public void Folds_reduces_the_given_list_from_the_left_with_a_function_direction_dependent_function_applied_to_non_empty_list()
+    public void
+        Folds_reduces_the_given_list_from_the_left_with_a_function_direction_dependent_function_applied_to_non_empty_list()
     {
         var list = new List<int> { 2, 5 };
         var initial = 5;
@@ -138,7 +146,8 @@ public class ListOpsTests
     }
 
     [Fact]
-    public void Folds_reduces_the_given_list_from_the_right_with_a_function_direction_independent_function_applied_to_non_empty_list()
+    public void
+        Folds_reduces_the_given_list_from_the_right_with_a_function_direction_independent_function_applied_to_non_empty_list()
     {
         var list = new List<int> { 1, 2, 3, 4 };
         var initial = 5;
@@ -147,7 +156,8 @@ public class ListOpsTests
     }
 
     [Fact]
-    public void Folds_reduces_the_given_list_from_the_right_with_a_function_direction_dependent_function_applied_to_non_empty_list()
+    public void
+        Folds_reduces_the_given_list_from_the_right_with_a_function_direction_dependent_function_applied_to_non_empty_list()
     {
         var list = new List<int> { 2, 5 };
         var initial = 5;
@@ -155,14 +165,14 @@ public class ListOpsTests
         Assert.Equal(2, ListOps.Foldr(list, initial, function));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Reverse_the_elements_of_the_list_empty_list()
     {
         var list = new List<int>();
         Assert.Empty(ListOps.Reverse(list));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Reverse_the_elements_of_the_list_non_empty_list()
     {
         var list = new List<int> { 1, 3, 5, 7 };
@@ -170,11 +180,11 @@ public class ListOpsTests
         Assert.Equal(expected, ListOps.Reverse(list));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Reverse_the_elements_of_the_list_list_of_lists_is_not_flattened()
     {
-        var list = new List<List<int>> { new List<int> { 1, 2 }, new List<int> { 3 }, new List<int>(), new List<int> { 4, 5, 6 } };
-        var expected = new List<List<int>> { new List<int> { 4, 5, 6 }, new List<int>(), new List<int> { 3 }, new List<int> { 1, 2 } };
+        var list = new List<List<int>> { new() { 1, 2 }, new() { 3 }, new(), new() { 4, 5, 6 } };
+        var expected = new List<List<int>> { new() { 4, 5, 6 }, new(), new() { 3 }, new() { 1, 2 } };
         Assert.Equal(expected, ListOps.Reverse(list));
     }
 }

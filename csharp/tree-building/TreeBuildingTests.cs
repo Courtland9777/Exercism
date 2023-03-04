@@ -13,10 +13,10 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsLeaf(tree, id: 0);
+        AssertTreeIsLeaf(tree, 0);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Three_nodes_in_order()
     {
         var records = new[]
@@ -28,12 +28,12 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsBranch(tree, id: 0, childCount: 2);
-        AssertTreeIsLeaf(tree.Children[0], id: 1);
-        AssertTreeIsLeaf(tree.Children[1], id: 2);
+        AssertTreeIsBranch(tree, 0, 2);
+        AssertTreeIsLeaf(tree.Children[0], 1);
+        AssertTreeIsLeaf(tree.Children[1], 2);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Three_nodes_in_reverse_order()
     {
         var records = new[]
@@ -45,12 +45,12 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsBranch(tree, id: 0, childCount: 2);
-        AssertTreeIsLeaf(tree.Children[0], id: 1);
-        AssertTreeIsLeaf(tree.Children[1], id: 2);
+        AssertTreeIsBranch(tree, 0, 2);
+        AssertTreeIsLeaf(tree.Children[0], 1);
+        AssertTreeIsLeaf(tree.Children[1], 2);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void More_than_two_children()
     {
         var records = new[]
@@ -63,13 +63,13 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsBranch(tree, id: 0, childCount: 3);
-        AssertTreeIsLeaf(tree.Children[0], id: 1);
-        AssertTreeIsLeaf(tree.Children[1], id: 2);
-        AssertTreeIsLeaf(tree.Children[2], id: 3);
+        AssertTreeIsBranch(tree, 0, 3);
+        AssertTreeIsLeaf(tree.Children[0], 1);
+        AssertTreeIsLeaf(tree.Children[1], 2);
+        AssertTreeIsLeaf(tree.Children[2], 3);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Binary_tree()
     {
         var records = new[]
@@ -85,17 +85,17 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsBranch(tree, id: 0, childCount: 2);
-        AssertTreeIsBranch(tree.Children[0], id: 1, childCount: 2);
-        AssertTreeIsBranch(tree.Children[1], id: 2, childCount: 2);
+        AssertTreeIsBranch(tree, 0, 2);
+        AssertTreeIsBranch(tree.Children[0], 1, 2);
+        AssertTreeIsBranch(tree.Children[1], 2, 2);
 
-        AssertTreeIsLeaf(tree.Children[0].Children[0], id: 4);
-        AssertTreeIsLeaf(tree.Children[0].Children[1], id: 5);
-        AssertTreeIsLeaf(tree.Children[1].Children[0], id: 3);
-        AssertTreeIsLeaf(tree.Children[1].Children[1], id: 6);
+        AssertTreeIsLeaf(tree.Children[0].Children[0], 4);
+        AssertTreeIsLeaf(tree.Children[0].Children[1], 5);
+        AssertTreeIsLeaf(tree.Children[1].Children[0], 3);
+        AssertTreeIsLeaf(tree.Children[1].Children[1], 6);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Unbalanced_tree()
     {
         var records = new[]
@@ -111,17 +111,17 @@ public class TreeBuildingTests
 
         var tree = TreeBuilder.BuildTree(records);
 
-        AssertTreeIsBranch(tree, id: 0, childCount: 2);
-        AssertTreeIsBranch(tree.Children[0], id: 1, childCount: 1);
-        AssertTreeIsBranch(tree.Children[1], id: 2, childCount: 3);
+        AssertTreeIsBranch(tree, 0, 2);
+        AssertTreeIsBranch(tree.Children[0], 1, 1);
+        AssertTreeIsBranch(tree.Children[1], 2, 3);
 
-        AssertTreeIsLeaf(tree.Children[0].Children[0], id: 4);
-        AssertTreeIsLeaf(tree.Children[1].Children[0], id: 3);
-        AssertTreeIsLeaf(tree.Children[1].Children[1], id: 5);
-        AssertTreeIsLeaf(tree.Children[1].Children[2], id: 6);
+        AssertTreeIsLeaf(tree.Children[0].Children[0], 4);
+        AssertTreeIsLeaf(tree.Children[1].Children[0], 3);
+        AssertTreeIsLeaf(tree.Children[1].Children[1], 5);
+        AssertTreeIsLeaf(tree.Children[1].Children[2], 6);
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Empty_input()
     {
         var records = new TreeBuildingRecord[0];
@@ -129,7 +129,7 @@ public class TreeBuildingTests
         Assert.Throws<ArgumentException>(() => TreeBuilder.BuildTree(records));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Root_node_has_parent()
     {
         var records = new[]
@@ -141,7 +141,7 @@ public class TreeBuildingTests
         Assert.Throws<ArgumentException>(() => TreeBuilder.BuildTree(records));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void No_root_node()
     {
         var records = new[]
@@ -153,7 +153,7 @@ public class TreeBuildingTests
     }
 
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Non_continuous()
     {
         var records = new[]
@@ -167,7 +167,7 @@ public class TreeBuildingTests
         Assert.Throws<ArgumentException>(() => TreeBuilder.BuildTree(records));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Cycle_directly()
     {
         var records = new[]
@@ -184,7 +184,7 @@ public class TreeBuildingTests
         Assert.Throws<ArgumentException>(() => TreeBuilder.BuildTree(records));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Cycle_indirectly()
     {
         var records = new[]
@@ -201,7 +201,7 @@ public class TreeBuildingTests
         Assert.Throws<ArgumentException>(() => TreeBuilder.BuildTree(records));
     }
 
-    [Fact(Skip = "Remove this Skip property to run this test")]
+    [Fact]
     public void Higher_id_parent_of_lower_id()
     {
         var records = new[]

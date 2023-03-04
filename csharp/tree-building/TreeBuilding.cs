@@ -12,9 +12,7 @@ public class Tree
 {
     public int Id { get; set; }
     public int ParentId { get; set; }
-
-    public List<Tree> Children { get; set; }
-
+    public List<Tree> Children { get; set; } = new();
     public bool IsLeaf => Children.Count == 0;
 }
 
@@ -22,46 +20,68 @@ public static class TreeBuilder
 {
     public static Tree BuildTree(IEnumerable<TreeBuildingRecord> records)
     {
-        var ordered = new SortedList<int, TreeBuildingRecord>();
+        // Sort records by record id
+        var orderedRecords = records.OrderBy(r => r.RecordId).ToList();
 
-        foreach (var record in records)
+        // Validate records
+        ValidateRecords(orderedRecords);
+
+        // Build trees from records
+        var trees = BuildTrees(orderedRecords);
+
+        // Connect children to parents
+        ConnectChildrenToParents(trees);
+
+        // Return root node
+        return trees.First(t => t.Id == 0);
+    }
+
+    private static void ValidateRecords(IReadOnlyList<TreeBuildingRecord> records)
+    {
+        if (records.Count == 0)
         {
-            ordered.Add(record.RecordId, record);
+            throw new ArgumentException("Records cannot be empty.");
         }
 
-        records = ordered.Values;
+        if (records[0].RecordId != 0)
+        {
+            throw new ArgumentException("Root node must have a record id of 0.");
+        }
 
-        var trees = new List<Tree>();
-        var previousRecordId = -1;
+        if (records[0].ParentId != 0)
+        {
+            throw new ArgumentException("Root node must have a parent id of 0.");
+        }
 
-        foreach (var record in records)
-        {   
-            var t = new Tree { Children = new List<Tree>(), Id = record.RecordId, ParentId = record.ParentId };
-            trees.Add(t);
+        for (var i = 1; i < records.Count; i++)
+        {
+            var record = records[i];
 
-            if ((t.Id == 0 && t.ParentId != 0) ||
-                (t.Id != 0 && t.ParentId >= t.Id) ||
-                (t.Id != 0 && t.Id != previousRecordId + 1))
+            if (record.RecordId != i)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(
+                    $"Record id must be consecutive starting from 0. Invalid record id: {record.RecordId}.");
             }
 
-            ++previousRecordId;
+            if (record.ParentId >= i)
+            {
+                throw new ArgumentException(
+                    $"Parent id cannot be greater than or equal to record id. Invalid parent id: {record.ParentId}.");
+            }
         }
-        
-        if (trees.Count == 0)
-        {
-            throw new ArgumentException();
-        }
+    }
 
-        for (int i = 1; i < trees.Count; i++)
-        {
-            var t = trees.First(x => x.Id == i);
-            var parent = trees.First(x => x.Id == t.ParentId);
-            parent.Children.Add(t);
-        }
 
-        var r = trees.First(t => t.Id == 0);
-        return r;
+    private static List<Tree> BuildTrees(IEnumerable<TreeBuildingRecord> records) => records
+        .Select(record => new Tree { Id = record.RecordId, ParentId = record.ParentId }).ToList();
+
+    private static void ConnectChildrenToParents(IReadOnlyList<Tree> trees)
+    {
+        for (var i = 1; i < trees.Count; i++)
+        {
+            var child = trees[i];
+            var parent = trees[child.ParentId];
+            parent.Children.Add(child);
+        }
     }
 }
