@@ -9,24 +9,23 @@ public static class Bob
     private const string Fine = "Fine. Be that way!";
 
     public static string Response(string statement) =>
-        string.IsNullOrWhiteSpace(statement)
-            ? Fine
-            : AreAllLettersCapital(statement)
-              && IsLastCharQuestionMark(statement)
-              && IsThereLetters(statement)
-            ? CalmDown
-            : AreAllLettersCapital(statement) && IsThereLetters(statement)
-            ? ChillOut
-            : IsLastCharQuestionMark(statement)
-            ? Sure
-            : Whatever;
+        statement switch
+        {
+            not null when string.IsNullOrWhiteSpace(statement) => Fine,
+            not null when AreAllLettersCapital(statement) && IsLastCharQuestionMark(statement) &&
+                          AnyLetters(statement) => CalmDown,
+            not null when AreAllLettersCapital(statement) && AnyLetters(statement) => ChillOut,
+            not null when IsLastCharQuestionMark(statement) => Sure,
+            _ => Whatever
+        };
 
-    private static bool IsThereLetters(string statement) =>
+
+    private static bool AnyLetters(string statement) =>
         statement.Any(char.IsLetter);
 
     private static bool AreAllLettersCapital(string statement) =>
         statement.Where(char.IsLetter).All(char.IsUpper);
 
     private static bool IsLastCharQuestionMark(string statement) =>
-        statement.Trim().Last().Equals('?');
+        statement.TrimEnd().Last().Equals('?');
 }
